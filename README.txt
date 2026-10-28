@@ -21,3 +21,24 @@ Important:
 - WhatsApp will not send automatically; the customer must press Send.
 - This version uses one booking per time slot and fixed demo slot times. It does not yet calculate overlapping service durations or enforce weekly opening hours.
 - Never expose a Supabase secret/service_role key.
+
+
+PREMIUM ADMIN ANALYTICS UPDATE
+------------------------------
+The admin area now includes animated booking/revenue trend lines, booking-status donut, popular-service bars, monthly KPI cards, period filters, and a visitor count panel. The charts use lightweight Canvas drawing; no chart framework is required.
+
+VISITOR TRACKING SETUP (OPTIONAL)
+1. Open your Supabase project > SQL Editor.
+2. Open visitor-analytics.sql from this folder, copy its full contents, and run it.
+3. Redeploy/upload the updated website files to GitHub Pages.
+4. Open the public website in a browser and visit it once; then sign in to the admin area and refresh.
+
+The visitor metric records anonymous browser tab sessions, not verified unique humans. It does not collect names, phone numbers, or email addresses. If the SQL is not installed, the dashboard displays a setup note instead of inventing a number.
+
+REVENUE DEFINITION
+Revenue is calculated from appointments marked Completed and their final_total (falling back to subtotal). It is not proof of payment received. If you need cash/UPI/card payment tracking, add a separate payment status/amount field and record actual payments.
+
+IMPORTANT LIMITS
+- Analytics are calculated from the appointment records loaded by the current admin query (up to 200 recent records). For a busy salon, use database-side aggregate functions for complete historical reporting.
+- Replace YOUR_PUBLISHABLE_KEY in script.js with your existing Supabase publishable key before publishing if it is still a placeholder. Never use a secret/service_role key in frontend code.
+- Keep Supabase RLS enabled and test the admin account before going live.

@@ -9,10 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/android-chrome-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="manifest" href="favicon_io/site.webmanifest">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="responsive.css">
 </head>
@@ -160,11 +160,17 @@
         </form>
       </div>
       <div id="adminDashboard" hidden>
-        <div class="admin-heading"><div><span class="eyebrow">SB SALON MANAGEMENT</span><h2>Appointments <em>desk.</em></h2></div><button class="button button-outline" id="adminSignOutButton" type="button">Sign out</button></div>
-        <div class="admin-stats" id="adminStats"></div>
-        <div class="admin-tools"><label class="field-label">Filter by date<input type="date" id="adminDateFilter"></label><label class="field-label">Status<select id="adminStatusFilter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label><button class="button button-outline" id="refreshAppointmentsButton" type="button">Refresh</button></div>
+        <div class="admin-heading"><div><span class="eyebrow">SB SALON · MANAGEMENT</span><h2>Dashboard <em>overview.</em></h2><p class="muted">Your salon performance, at a glance.</p></div><div class="admin-heading-actions"><label class="period-select"><span>REPORT PERIOD</span><select id="analyticsPeriod"><option value="month">This month</option><option value="lastMonth">Last month</option><option value="year">This year</option><option value="all">All time</option></select></label><button class="button button-outline" id="refreshAppointmentsButton" type="button">↻ Refresh</button><button class="button button-outline" id="adminSignOutButton" type="button">Sign out</button></div></div>
+        <div class="analytics-kpis" id="adminStats"></div>
+        <div class="analytics-grid">
+          <article class="analytics-panel revenue-panel"><div class="panel-heading"><div><span class="eyebrow">PERFORMANCE</span><h3>Bookings &amp; revenue</h3><p class="muted">Daily movement for the selected period</p></div><span class="chart-legend"><i class="legend-bookings"></i>Bookings <i class="legend-revenue"></i>Revenue</span></div><div class="chart-wrap"><canvas id="performanceChart" aria-label="Bookings and revenue trend chart"></canvas></div><div class="chart-footnote" id="chartFootnote">Based on booking records available in Supabase.</div></article>
+          <article class="analytics-panel status-panel"><div class="panel-heading"><div><span class="eyebrow">APPOINTMENTS</span><h3>Booking status</h3></div></div><div class="status-chart-layout"><div class="donut-wrap"><canvas id="statusChart" aria-label="Booking status chart"></canvas><div class="donut-center"><strong id="statusTotal">0</strong><span>Total</span></div></div><div class="status-legend" id="statusLegend"></div></div></article>
+          <article class="analytics-panel service-panel"><div class="panel-heading"><div><span class="eyebrow">WHAT CLIENTS LOVE</span><h3>Popular services</h3></div></div><div id="popularServices" class="popular-services"><p class="muted">Service insights appear when bookings are available.</p></div></article>
+          <article class="analytics-panel visitors-panel"><div class="panel-heading"><div><span class="eyebrow">WEBSITE REACH</span><h3>Visitor activity</h3></div><span class="live-dot-label"><i></i> Tracking</span></div><div class="visitor-number" id="visitorTotal">—</div><p class="muted" id="visitorDescription">Set up the analytics SQL to start counting website visits.</p><div class="visitor-mini-chart"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+        </div>
+        <div class="admin-section-heading"><div><span class="eyebrow">CLIENT MANAGEMENT</span><h3>Recent bookings</h3></div><div class="admin-tools"><label class="field-label">Filter by date<input type="date" id="adminDateFilter"></label><label class="field-label">Status<select id="adminStatusFilter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label></div></div>
         <div class="admin-list" id="adminAppointmentList"><p class="muted">Loading appointments…</p></div>
-        <p class="form-small">For customer privacy, use this dashboard only on a trusted device. Database row-level security must remain enabled.</p>
+        <p class="form-small">Revenue is calculated from completed bookings in the database. Visitor tracking counts browser sessions, not verified unique people. Keep database row-level security enabled.</p>
       </div>
     </div>
   </section>

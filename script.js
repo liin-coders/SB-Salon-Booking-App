@@ -4,7 +4,7 @@
   Never put a Supabase secret/service_role key in browser code.
 */
 const SUPABASE_URL = "https://uhcvntujsqptimoccgpt.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_MmrHK3YZKl4IXXR7PY0JDQ_i3Xhf2iV";
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_PUBLISHABLE_KEY";
 
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -13,7 +13,7 @@ const CONFIG = {
   salonName: "SB Salon",
   // Add the salon's WhatsApp number with country code and digits only, e.g. 919876543210.
   // Leave empty until the correct number is known. Booking still saves without WhatsApp redirection.
-  whatsappNumber: "916280039604",
+  whatsappNumber: "",
   // These are demo slot times. Update them to match the salon's real opening hours.
   slotTimes: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"]
 };
@@ -393,49 +393,172 @@ async function loadAdminAppointments() {
   renderAdminAppointments();
 }
 
+function getPeriodRange(period = $('#analyticsPeriod')?.value || 'month') {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  if (period === 'lastMonth') {
+    start.setMonth(start.getMonth() - 1);
+    end.setTime(new Date(now.getFullYear(), now.getMonth(), 1).getTime());
+  } else if (period === 'year') {
+    start.setMonth(0, 1);
+    end.setFullYear(now.getFullYear() + 1, 0, 1);
+  } else if (period === 'all') {
+    return { start: null, end: null, label: 'All time' };
+  }
+  return { start: localDateString(start), end: localDateString(end), label: period === 'lastMonth' ? 'Last month' : period === 'year' ? 'This year' : 'This month' };
+}
+
+function inRange(date, range) {
+  return (!range.start || date >= range.start) && (!range.end || date < range.end);
+}
+
+function animateNumber(element, target, formatter = value => Math.round(value).toLocaleString('en-IN')) {
+  if (!element) return;
+  const duration = 650;
+  const startTime = performance.now();
+  const from = 0;
+  const tick = now => {
+    const progress = Math.min(1, (now - startTime) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    element.textContent = formatter(from + (target - from) * eased);
+    if (progress < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function renderAnalytics() {
+  const range = getPeriodRange();
+  const all = state.adminAppointments;
+  const periodAppointments = all.filter(a => inRange(a.appointment_date, range));
+  const completed = periodAppointments.filter(a => a.status === 'completed');
+  const revenue = completed.reduce((sum, a) => sum + Number(a.final_total ?? ((Number(a.subtotal) || 0) + (Number(a.price_adjustment) || 0))), 0);
+  const previousStart = range.start ? new Date(`${range.start}T12:00:00`) : null;
+  let previousAppointments = [];
+  if (range.start && range.end) {
+    const duration = new Date(`${range.end}T12:00:00`) - previousStart;
+    const prevStart = new Date(previousStart.getTime() - duration);
+    const prevStartStr = localDateString(prevStart);
+    previousAppointments = all.filter(a => a.appointment_date >= prevStartStr && a.appointment_date < range.start);
+  }
+  const previousRevenue = previousAppointments.filter(a => a.status === 'completed').reduce((sum, a) => sum + Number(a.final_total ?? ((Number(a.subtotal) || 0) + (Number(a.price_adjustment) || 0)), 0), 0);
+  const change = (current, previous) => previous ? `${current >= previous ? '+' : ''}${Math.round(((current - previous) / previous) * 100)}%` : '—';
+  $('#adminStats').innerHTML = `
+    <article class="analytics-kpi kpi-revenue"><div class="kpi-top"><span class="kpi-icon">₹</span><span class="kpi-label">${range.label} revenue</span><span class="kpi-spark spark-purple">↗</span></div><strong data-kpi="revenue">${money(revenue)}</strong><div class="kpi-foot"><span class="trend-pill">${change(revenue, previousRevenue)}</span><span>from completed bookings</span></div></article>
+    <article class="analytics-kpi kpi-bookings"><div class="kpi-top"><span class="kpi-icon">▦</span><span class="kpi-label">Appointments</span><span class="kpi-spark spark-gold">↗</span></div><strong data-kpi="bookings">${periodAppointments.length}</strong><div class="kpi-foot"><span class="trend-pill">${change(periodAppointments.length, previousAppointments.length)}</span><span>vs previous period</span></div></article>
+    <article class="analytics-kpi kpi-confirmed"><div class="kpi-top"><span class="kpi-icon">✓</span><span class="kpi-label">Confirmed</span><span class="kpi-spark spark-pink">↗</span></div><strong data-kpi="confirmed">${periodAppointments.filter(a => a.status === 'confirmed').length}</strong><div class="kpi-foot"><span>Approved appointments</span></div></article>
+    <article class="analytics-kpi kpi-pending"><div class="kpi-top"><span class="kpi-icon">◷</span><span class="kpi-label">Pending requests</span><span class="kpi-spark spark-gold">!</span></div><strong data-kpi="pending">${periodAppointments.filter(a => a.status === 'pending').length}</strong><div class="kpi-foot"><span>Need your attention</span></div></article>`;
+  drawPerformanceChart(periodAppointments, range);
+  drawStatusChart(periodAppointments);
+  drawPopularServices(periodAppointments);
+  loadVisitorAnalytics(range);
+}
+
+function drawPerformanceChart(appointments, range) {
+  const canvas = $('#performanceChart');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width) return;
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = rect.width * ratio;
+  canvas.height = 260 * ratio;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(ratio, ratio);
+  const w = rect.width, h = 260, pad = { l: 34, r: 12, t: 16, b: 28 };
+  const chartW = w - pad.l - pad.r, chartH = h - pad.t - pad.b;
+  let labels = [], bookingCounts = [], revenues = [];
+  if (range.label === 'This year' || range.label === 'All time') {
+    const months = Array.from({length: 12}, (_, i) => new Date(new Date().getFullYear(), i, 1));
+    labels = months.map(d => d.toLocaleDateString('en-IN', {month:'short'}));
+    bookingCounts = months.map(d => appointments.filter(a => { const x = new Date(`${a.appointment_date}T12:00:00`); return x.getMonth() === d.getMonth() && x.getFullYear() === d.getFullYear(); }).length);
+    revenues = months.map(d => appointments.filter(a => a.status === 'completed' && new Date(`${a.appointment_date}T12:00:00`).getMonth() === d.getMonth() && new Date(`${a.appointment_date}T12:00:00`).getFullYear() === d.getFullYear()).reduce((s,a)=>s+Number(a.final_total ?? a.subtotal ?? 0),0));
+  } else {
+    const start = range.start ? new Date(`${range.start}T12:00:00`) : new Date(new Date().getFullYear(),new Date().getMonth(),1);
+    const end = range.end ? new Date(`${range.end}T12:00:00`) : new Date();
+    const count = Math.max(1, Math.min(31, Math.round((end-start)/86400000)));
+    labels = Array.from({length: count}, (_, i) => String(i + 1));
+    bookingCounts = labels.map((_, i) => appointments.filter(a => Number(a.appointment_date.slice(-2)) === i + 1).length);
+    revenues = labels.map((_, i) => appointments.filter(a => a.status === 'completed' && Number(a.appointment_date.slice(-2)) === i + 1).reduce((s,a)=>s+Number(a.final_total ?? a.subtotal ?? 0),0));
+  }
+  const maxB = Math.max(4, ...bookingCounts) * 1.18;
+  const maxR = Math.max(1000, ...revenues) * 1.18;
+  ctx.clearRect(0,0,w,h);
+  ctx.font = '10px Poppins, sans-serif'; ctx.fillStyle = '#8b89a1'; ctx.strokeStyle = 'rgba(124,116,160,.13)'; ctx.lineWidth = 1;
+  for (let i=0;i<5;i++) { const y=pad.t + chartH*i/4; ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke(); ctx.fillText(String(Math.round(maxB*(4-i)/4)),3,y+3); }
+  const point = (value, max, i) => ({x:pad.l + (labels.length <= 1 ? chartW/2 : chartW*i/(labels.length-1)), y:pad.t + chartH - (value/max)*chartH});
+  const drawLine = (values, max, color, fill) => {
+    if (!values.length) return;
+    ctx.beginPath(); values.forEach((v,i)=>{const p=point(v,max,i); i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);});
+    if (fill) { const last=point(values[values.length-1],max,values.length-1), first=point(values[0],max,0); ctx.lineTo(last.x,pad.t+chartH);ctx.lineTo(first.x,pad.t+chartH);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.beginPath();values.forEach((v,i)=>{const p=point(v,max,i);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);}); }
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+    values.forEach((v,i)=>{const p=point(v,max,i);ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();});
+  };
+  drawLine(revenues,maxR,'#ff9a24','rgba(255,154,36,.07)');
+  drawLine(bookingCounts,maxB,'#743cff','rgba(116,60,255,.08)');
+  const every = labels.length > 16 ? Math.ceil(labels.length/8) : labels.length > 9 ? 2 : 1;
+  labels.forEach((label,i)=>{if(i%every===0||i===labels.length-1){const x=pad.l+(labels.length<=1?chartW/2:chartW*i/(labels.length-1));ctx.fillStyle='#8b89a1';ctx.fillText(label,x-4,h-7);}});
+}
+
+function drawStatusChart(appointments) {
+  const canvas = $('#statusChart'); if (!canvas) return;
+  const rect = canvas.getBoundingClientRect(); if (!rect.width) return;
+  const ratio=Math.min(window.devicePixelRatio||1,2), size=Math.min(rect.width,190); canvas.width=size*ratio;canvas.height=size*ratio;
+  const ctx=canvas.getContext('2d');ctx.scale(ratio,ratio);const cx=size/2,cy=size/2,r=size*.42,lw=size*.15;
+  const items=[['confirmed','#743cff'],['pending','#ffb82e'],['completed','#36b98a'],['cancelled','#ff5b86']];
+  const total=appointments.length;let angle=-Math.PI/2;ctx.lineWidth=lw;ctx.lineCap='butt';
+  items.forEach(([status,color])=>{const count=appointments.filter(a=>a.status===status).length;const sweep=total?count/total*Math.PI*2:0;ctx.beginPath();ctx.strokeStyle=color;ctx.arc(cx,cy,r,angle,angle+sweep);ctx.stroke();angle+=sweep;});
+  $('#statusTotal').textContent=total;
+  $('#statusLegend').innerHTML=items.map(([status,color])=>{const count=appointments.filter(a=>a.status===status).length;return `<div class="status-legend-row"><i style="background:${color}"></i><span>${status[0].toUpperCase()+status.slice(1)}</span><strong>${count}</strong></div>`;}).join('');
+}
+
+function drawPopularServices(appointments) {
+  const counts = new Map();
+  appointments.forEach(a => (a.appointment_services || []).forEach(s => counts.set(s.service_name,(counts.get(s.service_name)||0)+1)));
+  const sorted=[...counts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,5), max=Math.max(1,...sorted.map(x=>x[1]));
+  $('#popularServices').innerHTML=sorted.length?sorted.map(([name,count],i)=>`<div class="popular-service"><div class="popular-service-top"><span>${escapeHtml(name)}</span><strong>${count}</strong></div><div class="popular-track"><span style="--bar-width:${Math.round(count/max*100)}%;--bar-index:${i}"></span></div></div>`).join(''):'<p class="muted">No service bookings in this period yet.</p>';
+}
+
+async function loadVisitorAnalytics(range) {
+  const totalEl=$('#visitorTotal'), desc=$('#visitorDescription');
+  try {
+    let query=supabaseClient.from('site_visits').select('id', {count:'exact',head:true});
+    if(range.start) query=query.gte('visited_at',`${range.start}T00:00:00`);
+    if(range.end) query=query.lt('visited_at',`${range.end}T00:00:00`);
+    const {count,error}=await query;
+    if(error) throw error;
+    totalEl.textContent=(count||0).toLocaleString('en-IN');
+    desc.textContent=`Recorded browser sessions · ${range.label.toLowerCase()}`;
+  } catch (error) {
+    totalEl.textContent='—';
+    desc.textContent='Visitor tracking needs the included Supabase SQL setup.';
+  }
+}
+
+async function trackSiteVisit() {
+  try {
+    if (sessionStorage.getItem('sbSalonVisitRecorded')) return;
+    const {error}=await supabaseClient.from('site_visits').insert({source:'website'});
+    if (!error) sessionStorage.setItem('sbSalonVisitRecorded','1');
+  } catch (_) { /* Optional analytics; never block booking if not configured. */ }
+}
+
 function renderAdminAppointments() {
-  const dateFilter = $("#adminDateFilter").value;
-  const statusFilter = $("#adminStatusFilter").value;
+  const dateFilter = $('#adminDateFilter').value;
+  const statusFilter = $('#adminStatusFilter').value;
   const appointments = state.adminAppointments.filter(appointment =>
     (!dateFilter || appointment.appointment_date === dateFilter) &&
-    (statusFilter === "all" || appointment.status === statusFilter)
+    (statusFilter === 'all' || appointment.status === statusFilter)
   );
-
-  const pending = state.adminAppointments.filter(a => a.status === "pending").length;
-  const confirmed = state.adminAppointments.filter(a => a.status === "confirmed").length;
-  $("#adminStats").innerHTML = `
-    <div class="stat-card"><span>All loaded bookings</span><strong>${state.adminAppointments.length}</strong></div>
-    <div class="stat-card"><span>Pending requests</span><strong>${pending}</strong></div>
-    <div class="stat-card"><span>Confirmed visits</span><strong>${confirmed}</strong></div>`;
-
+  renderAnalytics();
   if (!appointments.length) {
-    $("#adminAppointmentList").innerHTML = '<div class="loading-card">No appointments match these filters.</div>';
+    $('#adminAppointmentList').innerHTML = '<div class="loading-card">No appointments match these filters.</div>';
     return;
   }
-
-  $("#adminAppointmentList").innerHTML = appointments.map(appointment => {
-    const serviceText = (appointment.appointment_services || [])
-      .map(item => `${item.service_name} (${money(item.unit_price)})`).join(", ") || "No service details";
+  $('#adminAppointmentList').innerHTML = appointments.map(appointment => {
+    const serviceText = (appointment.appointment_services || []).map(item => `${item.service_name} (${money(item.unit_price)})`).join(', ') || 'No service details';
     const total = appointment.final_total ?? ((Number(appointment.subtotal) || 0) + (Number(appointment.price_adjustment) || 0));
-    return `<article class="admin-appointment" data-appointment-id="${escapeHtml(appointment.id)}">
-      <div>
-        <span class="status-pill">${escapeHtml(appointment.status)}</span>
-        <h3>${escapeHtml(appointment.customer_name)}</h3>
-        <p>${escapeHtml(prettyDate(appointment.appointment_date))} · ${escapeHtml(prettyTime(appointment.appointment_time))}</p>
-        <p>Phone: ${escapeHtml(appointment.customer_phone)}${appointment.customer_email ? ` · ${escapeHtml(appointment.customer_email)}` : ""}</p>
-        <p class="appointment-services">${escapeHtml(serviceText)}</p>
-        <p>Estimated total: <strong>${money(total)}</strong></p>
-        ${appointment.message ? `<p>Customer note: ${escapeHtml(appointment.message)}</p>` : ""}
-        ${appointment.admin_notes ? `<p>Admin notes: ${escapeHtml(appointment.admin_notes)}</p>` : ""}
-      </div>
-      <div class="admin-appointment-actions">
-        <select aria-label="Update booking status" data-status-id="${escapeHtml(appointment.id)}">
-          ${["pending","confirmed","completed","cancelled"].map(status => `<option value="${status}" ${appointment.status === status ? "selected" : ""}>${status[0].toUpperCase()+status.slice(1)}</option>`).join("")}
-        </select>
-        <button class="button button-outline" type="button" data-save-status="${escapeHtml(appointment.id)}">Save status</button>
-      </div>
-    </article>`;
-  }).join("");
+    return `<article class="admin-appointment" data-appointment-id="${escapeHtml(appointment.id)}"><div><span class="status-pill status-${escapeHtml(appointment.status)}">${escapeHtml(appointment.status)}</span><h3>${escapeHtml(appointment.customer_name)}</h3><p>${escapeHtml(prettyDate(appointment.appointment_date))} · ${escapeHtml(prettyTime(appointment.appointment_time))}</p><p>Phone: ${escapeHtml(appointment.customer_phone)}${appointment.customer_email ? ` · ${escapeHtml(appointment.customer_email)}` : ''}</p><p class="appointment-services">${escapeHtml(serviceText)}</p><p>Estimated total: <strong>${money(total)}</strong></p>${appointment.message ? `<p>Customer note: ${escapeHtml(appointment.message)}</p>` : ''}${appointment.admin_notes ? `<p>Admin notes: ${escapeHtml(appointment.admin_notes)}</p>` : ''}</div><div class="admin-appointment-actions"><select aria-label="Update booking status" data-status-id="${escapeHtml(appointment.id)}">${['pending','confirmed','completed','cancelled'].map(status=>`<option value="${status}" ${appointment.status===status?'selected':''}>${status[0].toUpperCase()+status.slice(1)}</option>`).join('')}</select><button class="button button-outline" type="button" data-save-status="${escapeHtml(appointment.id)}">Save status</button></div></article>`;
+  }).join('');
 }
 
 async function updateAppointmentStatus(id) {
@@ -512,11 +635,14 @@ function init() {
   $("#refreshAppointmentsButton").addEventListener("click", loadAdminAppointments);
   $("#adminDateFilter").addEventListener("change", renderAdminAppointments);
   $("#adminStatusFilter").addEventListener("change", renderAdminAppointments);
+  $("#analyticsPeriod").addEventListener("change", renderAnalytics);
+  window.addEventListener("resize", () => { if (!$("#adminDashboard").hidden) renderAnalytics(); });
   $("#adminAppointmentList").addEventListener("click", event => {
     const button = event.target.closest("[data-save-status]");
     if (button) updateAppointmentStatus(button.dataset.saveStatus);
   });
 
+  trackSiteVisit();
   loadServices();
   loadSlots();
   renderSummary();
