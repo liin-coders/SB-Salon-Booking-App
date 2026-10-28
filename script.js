@@ -4,7 +4,7 @@
   Never put a Supabase secret/service_role key in browser code.
 */
 const SUPABASE_URL = "https://uhcvntujsqptimoccgpt.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "YOUR_PUBLISHABLE_KEY";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_MmrHK3YZKl4IXXR7PY0JDQ_i3Xhf2iV";
 
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -13,7 +13,7 @@ const CONFIG = {
   salonName: "SB Salon",
   // Add the salon's WhatsApp number with country code and digits only, e.g. 919876543210.
   // Leave empty until the correct number is known. Booking still saves without WhatsApp redirection.
-  whatsappNumber: "",
+  whatsappNumber: "916280039604",
   // These are demo slot times. Update them to match the salon's real opening hours.
   slotTimes: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"]
 };
