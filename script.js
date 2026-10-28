@@ -535,11 +535,31 @@ async function loadVisitorAnalytics(range) {
 }
 
 async function trackSiteVisit() {
+  console.log('1. trackSiteVisit started');
+
   try {
-    if (sessionStorage.getItem('sbSalonVisitRecorded')) return;
-    const {error}=await supabaseClient.from('site_visits').insert({source:'website'});
-    if (!error) sessionStorage.setItem('sbSalonVisitRecorded','1');
-  } catch (_) { /* Optional analytics; never block booking if not configured. */ }
+    if (sessionStorage.getItem('sbSalonVisitRecorded')) {
+      console.log('2. Visit already recorded in this session');
+      return;
+    }
+
+    console.log('3. Sending visit to Supabase');
+
+    const { data, error } = await supabaseClient
+      .from('site_visits')
+      .insert({ source: 'website' })
+      .select();
+
+    if (error) {
+      console.error('4. Supabase insert error:', error);
+      return;
+    }
+
+    console.log('5. Visit recorded successfully:', data);
+    sessionStorage.setItem('sbSalonVisitRecorded', '1');
+  } catch (error) {
+    console.error('6. Visitor tracking exception:', error);
+  }
 }
 
 function renderAdminAppointments() {
