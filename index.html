@@ -1,41 +1,50 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#171717">
-  <meta name="description" content="Book your next salon appointment at SB Salon. Explore services, choose a time, and confirm your booking.">
+  <meta name="description"
+    content="Book your next salon appointment at SB Salon. Explore services, choose a time, and confirm your booking.">
   <title>SB Salon — Your Style, Your Signature</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
-<link rel="manifest" href="favicon_io/site.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="favicon_io/site.webmanifest">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="responsive.css">
 </head>
+
 <body>
   <div class="welcome-overlay" id="welcomeOverlay" aria-label="Welcome to SB Salon">
     <div class="welcome-card">
       <span class="eyebrow">BEAUTY · STYLE · CONFIDENCE</span>
       <h1>SB <span>Salon</span></h1>
       <p>Your style, your signature.</p>
-      <button class="button button-gold" id="enterSiteButton" type="button">Explore &amp; Book <span aria-hidden="true">↗</span></button>
+      <button class="button button-gold" id="enterSiteButton" type="button">Explore &amp; Book <span
+          aria-hidden="true">↗</span></button>
       <button class="skip-intro" id="skipIntroButton" type="button">Skip intro</button>
     </div>
   </div>
 
   <header class="site-header">
-    <a class="brand" href="#home" aria-label="SB Salon home"><span class="brand-mark">SB</span><span>Salon<small>BEAUTY STUDIO</small></span></a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false" type="button"><span></span><span></span><span></span></button>
+    <a class="brand" href="#home" aria-label="SB Salon home"><span class="brand-mark">SB</span><span>Salon<small>BEAUTY
+          STUDIO</small></span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"
+      type="button"><span></span><span></span><span></span></button>
     <nav class="main-nav" id="mainNav">
       <a href="#home">Home</a>
       <a href="#services">Services</a>
       <a href="#about">Our Story</a>
       <a href="#booking">Book Appointment</a>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">☼ <span>Theme</span></button>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">☼
+        <span>Theme</span></button>
       <button class="nav-admin" id="openAdminButton" type="button">Admin</button>
     </nav>
   </header>
@@ -45,7 +54,8 @@
       <div class="hero-copy">
         <span class="eyebrow"><span class="eyebrow-line"></span> YOUR MOMENT, YOUR GLOW</span>
         <h1>Feel good.<br><em>Look unforgettable.</em></h1>
-        <p class="hero-text">A little time for yourself can change everything. Discover your next signature look at SB Salon.</p>
+        <p class="hero-text">A little time for yourself can change everything. Discover your next signature look at SB
+          Salon.</p>
         <div class="hero-actions">
           <a class="button button-gold" href="#booking">Book an appointment <span aria-hidden="true">↗</span></a>
           <a class="text-link" href="#services">Explore services <span aria-hidden="true">→</span></a>
@@ -53,11 +63,13 @@
         <div class="hero-note"><span class="note-dot"></span> Your appointment, made simple.</div>
       </div>
       <div class="hero-visual">
-        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=82" alt="Elegant modern salon interior" fetchpriority="high">
+        <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=82"
+          alt="Elegant modern salon interior" fetchpriority="high">
         <div class="image-label"><span>SB SALON</span><strong>Beauty in every detail.</strong></div>
         <div class="hero-stamp" aria-hidden="true">YOUR<br>TIME<br><span>TO GLOW</span></div>
       </div>
-      <div class="hero-bottom"><span>01 / PERSONAL CARE</span><span>MADE FOR YOU</span><span>SCROLL TO EXPLORE ↓</span></div>
+      <div class="hero-bottom"><span>01 / PERSONAL CARE</span><span>MADE FOR YOU</span><span>SCROLL TO EXPLORE ↓</span>
+      </div>
     </section>
 
     <section class="intro-strip">
@@ -68,65 +80,109 @@
 
     <section class="section-shell services-section" id="services">
       <div class="section-heading">
-        <div><span class="eyebrow">THE SB EXPERIENCE</span><h2>Services made <em>for you.</em></h2></div>
+        <div><span class="eyebrow">THE SB EXPERIENCE</span>
+          <h2>Services made <em>for you.</em></h2>
+        </div>
         <p>From everyday refreshes to your special-day look, find a service that feels like you.</p>
       </div>
       <div class="service-grid" id="serviceGrid">
         <div class="loading-card">Loading salon services…</div>
       </div>
-      <p class="section-footnote">Prices shown are starting prices. Final pricing may be adjusted by the salon if additional services are requested.</p>
+      <p class="section-footnote">Prices shown are starting prices. Final pricing may be adjusted by the salon if
+        additional services are requested.</p>
     </section>
 
     <section class="about-section" id="about">
-      <div class="about-image"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=80" alt="Salon styling chair and mirror" loading="lazy"></div>
+      <div class="about-image"><img
+          src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1200&q=80"
+          alt="Salon styling chair and mirror" loading="lazy"></div>
       <div class="about-copy">
         <span class="eyebrow">A SPACE FOR YOU</span>
         <h2>Your reset.<br><em>Your ritual.</em></h2>
-        <p>SB Salon is your place to pause, refresh, and leave feeling more like yourself. We believe great service begins with listening and ends with confidence.</p>
+        <p>SB Salon is your place to pause, refresh, and leave feeling more like yourself. We believe great service
+          begins with listening and ends with confidence.</p>
         <a class="text-link" href="#booking">Make time for yourself <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
     <section class="booking-section section-shell" id="booking">
       <div class="section-heading booking-heading">
-        <div><span class="eyebrow">YOUR NEXT VISIT</span><h2>Book your <em>moment.</em></h2></div>
+        <div><span class="eyebrow">YOUR NEXT VISIT</span>
+          <h2>Book your <em>moment.</em></h2>
+        </div>
         <p>Choose your services, select a date and time, and review your appointment before submitting.</p>
       </div>
       <div class="booking-layout">
         <form class="booking-form panel" id="bookingForm">
-          <div class="form-step"><span>01</span><div><h3>Choose your services</h3><p>Select one or more services.</p></div></div>
-          <div class="service-picker" id="servicePicker"><p class="muted">Loading services…</p></div>
+          <div class="form-step"><span>01</span>
+            <div>
+              <h3>Choose your services</h3>
+              <p>Select one or more services.</p>
+            </div>
+          </div>
+          <div class="service-picker" id="servicePicker">
+            <p class="muted">Loading services…</p>
+          </div>
 
-          <div class="form-step"><span>02</span><div><h3>Pick a date &amp; time</h3><p>Available appointment slots are shown below.</p></div></div>
+          <div class="form-step"><span>02</span>
+            <div>
+              <h3>Pick a date &amp; time</h3>
+              <p>Available appointment slots are shown below.</p>
+            </div>
+          </div>
           <label class="field-label" for="appointmentDate">Appointment date</label>
           <input id="appointmentDate" name="appointmentDate" type="date" required>
-          <div class="slots-heading"><span class="field-label">Available time slots</span><span class="muted" id="slotStatus">Choose a date first</span></div>
-          <div class="slot-grid" id="slotGrid"><p class="muted">Select a date to view slots.</p></div>
+          <div class="slots-heading"><span class="field-label">Available time slots</span><span class="muted"
+              id="slotStatus">Choose a date first</span></div>
+          <div class="slot-grid" id="slotGrid">
+            <p class="muted">Select a date to view slots.</p>
+          </div>
           <input id="appointmentTime" name="appointmentTime" type="hidden" required>
 
-          <div class="form-step"><span>03</span><div><h3>Your details</h3><p>We’ll use these details for your appointment.</p></div></div>
-          <div class="field-grid">
-            <label class="field-label">Full name<input name="customerName" id="customerName" type="text" autocomplete="name" maxlength="100" placeholder="Your full name" required></label>
-            <label class="field-label">Phone number<input name="customerPhone" id="customerPhone" type="tel" autocomplete="tel" maxlength="20" placeholder="Your contact number" required></label>
-            <label class="field-label field-wide">Email <span class="muted">(optional)</span><input name="customerEmail" id="customerEmail" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com"></label>
-            <label class="field-label field-wide">Anything we should know? <span class="muted">(optional)</span><textarea name="message" id="customerMessage" rows="3" maxlength="1000" placeholder="Special requests or notes"></textarea></label>
+          <div class="form-step"><span>03</span>
+            <div>
+              <h3>Your details</h3>
+              <p>We’ll use these details for your appointment.</p>
+            </div>
           </div>
-          <label class="arrival-reminder"><input type="checkbox" id="arrivalReminder" checked><span>Please remind me to arrive 10 minutes before my appointment.</span></label>
+          <div class="field-grid">
+            <label class="field-label">Full name<input name="customerName" id="customerName" type="text"
+                autocomplete="name" maxlength="100" placeholder="Your full name" required></label>
+            <label class="field-label">Phone number<input name="customerPhone" id="customerPhone" type="tel"
+                autocomplete="tel" maxlength="20" placeholder="Your contact number" required></label>
+            <label class="field-label field-wide">Email <span class="muted">(optional)</span><input name="customerEmail"
+                id="customerEmail" type="email" autocomplete="email" maxlength="254"
+                placeholder="you@example.com"></label>
+            <label class="field-label field-wide">Anything we should know? <span
+                class="muted">(optional)</span><textarea name="message" id="customerMessage" rows="3" maxlength="1000"
+                placeholder="Special requests or notes"></textarea></label>
+          </div>
+          <label class="arrival-reminder"><input type="checkbox" id="arrivalReminder" checked><span>Please remind me to
+              arrive 10 minutes before my appointment.</span></label>
           <p class="form-error" id="bookingError" role="alert"></p>
-          <button class="button button-gold button-full" id="submitBookingButton" type="submit">Request appointment <span aria-hidden="true">↗</span></button>
-          <p class="form-small">Submitting saves your request. WhatsApp will then open with a prefilled message for you to send.</p>
+          <button class="button button-gold button-full" id="submitBookingButton" type="submit">Request appointment
+            <span aria-hidden="true">↗</span></button>
+          <p class="form-small">Submitting saves your request. WhatsApp will then open with a prefilled message for you
+            to send.</p>
         </form>
 
         <aside class="summary-panel panel">
-          <div class="summary-top"><span class="eyebrow">YOUR VISIT</span><span class="summary-icon" aria-hidden="true">✳</span></div>
+          <div class="summary-top"><span class="eyebrow">YOUR VISIT</span><span class="summary-icon"
+              aria-hidden="true">✳</span></div>
           <h3>Appointment<br><em>summary</em></h3>
           <div class="summary-row"><span>Services</span><strong id="summaryServiceCount">None selected</strong></div>
-          <div id="summaryServices" class="summary-services"><p class="muted">Your selected services will appear here.</p></div>
+          <div id="summaryServices" class="summary-services">
+            <p class="muted">Your selected services will appear here.</p>
+          </div>
           <div class="summary-row"><span>Date</span><strong id="summaryDate">Not selected</strong></div>
           <div class="summary-row"><span>Time</span><strong id="summaryTime">Not selected</strong></div>
           <div class="summary-row total-row"><span>Estimated total</span><strong id="summaryTotal">₹0</strong></div>
-          <div class="summary-reminder"><span aria-hidden="true">◷</span><p><strong>A gentle reminder</strong><br>Plan to arrive 10 minutes early so your visit can begin smoothly.</p></div>
-          <p class="summary-disclaimer">The salon may adjust the final price if you add services or request changes during your visit.</p>
+          <div class="summary-reminder"><span aria-hidden="true">◷</span>
+            <p><strong>A gentle reminder</strong><br>Plan to arrive 10 minutes early so your visit can begin smoothly.
+            </p>
+          </div>
+          <p class="summary-disclaimer">The salon may adjust the final price if you add services or request changes
+            during your visit.</p>
         </aside>
       </div>
     </section>
@@ -139,43 +195,124 @@
   </main>
 
   <footer class="site-footer">
-    <a class="brand footer-brand" href="#home"><span class="brand-mark">SB</span><span>Salon<small>BEAUTY STUDIO</small></span></a>
+    <a class="brand footer-brand" href="#home"><span class="brand-mark">SB</span><span>Salon<small>BEAUTY
+          STUDIO</small></span></a>
     <p>Your style, your signature.</p>
-    <div class="footer-links"><a href="#services">Services</a><a href="#booking">Book now</a><button id="footerAdminButton" type="button">Admin access</button></div>
+    <div class="footer-links"><a href="#services">Services</a><a href="#booking">Book now</a><button
+        id="footerAdminButton" type="button">Admin access</button></div>
     <small>© <span id="currentYear"></span> SB Salon. All rights reserved.</small>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <section class="admin-shell" id="adminShell" hidden>
-    <div class="admin-topbar"><a class="brand" href="#home"><span class="brand-mark">SB</span><span>Salon<small>ADMIN AREA</small></span></a><button class="icon-button" id="closeAdminButton" type="button" aria-label="Close admin">✕</button></div>
+    <div class="admin-topbar"><a class="brand" href="#home"><span class="brand-mark">SB</span><span>Salon<small>ADMIN
+            AREA</small></span></a><button class="icon-button" id="closeAdminButton" type="button"
+        aria-label="Close admin">✕</button></div>
     <div class="admin-content">
       <div class="admin-login panel" id="adminLoginPanel">
-        <span class="eyebrow">STAFF ONLY</span><h2>Admin <em>sign in.</em></h2><p class="muted">Sign in with the Supabase account assigned the admin role.</p>
+        <span class="eyebrow">STAFF ONLY</span>
+        <h2>Admin <em>sign in.</em></h2>
+        <p class="muted">Sign in with the Supabase account assigned the admin role.</p>
         <form id="adminLoginForm">
           <label class="field-label">Email<input id="adminEmail" type="email" autocomplete="username" required></label>
-          <label class="field-label">Password<input id="adminPassword" type="password" autocomplete="current-password" required></label>
+          <label class="field-label">Password<input id="adminPassword" type="password" autocomplete="current-password"
+              required></label>
           <p class="form-error" id="adminLoginError" role="alert"></p>
           <button class="button button-gold button-full" type="submit" id="adminLoginButton">Sign in securely</button>
         </form>
       </div>
       <div id="adminDashboard" hidden>
-        <div class="admin-heading"><div><span class="eyebrow">SB SALON · MANAGEMENT</span><h2>Dashboard <em>overview.</em></h2><p class="muted">Your salon performance, at a glance.</p></div><div class="admin-heading-actions"><label class="period-select"><span>REPORT PERIOD</span><select id="analyticsPeriod"><option value="month">This month</option><option value="lastMonth">Last month</option><option value="year">This year</option><option value="all">All time</option></select></label><button class="button button-outline" id="refreshAppointmentsButton" type="button">↻ Refresh</button><button class="button button-outline" id="adminSignOutButton" type="button">Sign out</button></div></div>
-        <div class="analytics-kpis" id="adminStats"></div>
-        <div class="analytics-grid">
-          <article class="analytics-panel revenue-panel"><div class="panel-heading"><div><span class="eyebrow">PERFORMANCE</span><h3>Bookings &amp; revenue</h3><p class="muted">Daily movement for the selected period</p></div><span class="chart-legend"><i class="legend-bookings"></i>Bookings <i class="legend-revenue"></i>Revenue</span></div><div class="chart-wrap"><canvas id="performanceChart" aria-label="Bookings and revenue trend chart"></canvas></div><div class="chart-footnote" id="chartFootnote">Based on booking records available in Supabase.</div></article>
-          <article class="analytics-panel status-panel"><div class="panel-heading"><div><span class="eyebrow">APPOINTMENTS</span><h3>Booking status</h3></div></div><div class="status-chart-layout"><div class="donut-wrap"><canvas id="statusChart" aria-label="Booking status chart"></canvas><div class="donut-center"><strong id="statusTotal">0</strong><span>Total</span></div></div><div class="status-legend" id="statusLegend"></div></div></article>
-          <article class="analytics-panel service-panel"><div class="panel-heading"><div><span class="eyebrow">WHAT CLIENTS LOVE</span><h3>Popular services</h3></div></div><div id="popularServices" class="popular-services"><p class="muted">Service insights appear when bookings are available.</p></div></article>
-          <article class="analytics-panel visitors-panel"><div class="panel-heading"><div><span class="eyebrow">WEBSITE REACH</span><h3>Visitor activity</h3></div><span class="live-dot-label"><i></i> Tracking</span></div><div class="visitor-number" id="visitorTotal">—</div><p class="muted" id="visitorDescription">Set up the analytics SQL to start counting website visits.</p><div class="visitor-mini-chart"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+        <div class="admin-heading">
+          <div><span class="eyebrow">SB SALON · MANAGEMENT</span>
+            <h2>Dashboard <em>overview.</em></h2>
+            <p class="muted">Your salon performance, at a glance.</p>
+          </div>
+          <div class="admin-heading-actions"><label class="period-select"><span>REPORT PERIOD</span><select
+                id="analyticsPeriod">
+                <option value="month">This month</option>
+                <option value="lastMonth">Last month</option>
+                <option value="year">This year</option>
+                <option value="all">All time</option>
+              </select></label><button class="button button-outline" id="refreshAppointmentsButton" type="button">↻
+              Refresh</button><button class="button button-outline" id="adminSignOutButton" type="button">Sign
+              out</button></div>
         </div>
-        <div class="admin-section-heading"><div><span class="eyebrow">CLIENT MANAGEMENT</span><h3>Recent bookings</h3></div><div class="admin-tools"><label class="field-label">Filter by date<input type="date" id="adminDateFilter"></label><label class="field-label">Status<select id="adminStatusFilter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></label></div></div>
-        <div class="admin-list" id="adminAppointmentList"><p class="muted">Loading appointments…</p></div>
-        <p class="form-small">Revenue is calculated from completed bookings in the database. Visitor tracking counts browser sessions, not verified unique people. Keep database row-level security enabled.</p>
+         <div class="admin-section-heading">
+          <div><span class="eyebrow">CLIENT MANAGEMENT</span>
+            <h3>Recent bookings</h3>
+          </div>
+          <div class="admin-tools"><label class="field-label">Filter by date<input type="date"
+                id="adminDateFilter"></label><label class="field-label">Status<select id="adminStatusFilter">
+                <option value="all">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select></label></div>
+        </div>
+        <div class="admin-list" id="adminAppointmentList">
+          <p class="muted">Loading appointments…</p>
+        </div>
+        <p class="form-small">Revenue is calculated from completed bookings in the database. Visitor tracking counts
+          browser sessions, not verified unique people. Keep database row-level security enabled.</p>
       </div>
     </div>
+        <div class="analytics-kpis" id="adminStats"></div>
+        <div class="analytics-grid">
+          <article class="analytics-panel revenue-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">PERFORMANCE</span>
+                <h3>Bookings &amp; revenue</h3>
+                <p class="muted">Daily movement for the selected period</p>
+              </div><span class="chart-legend"><i class="legend-bookings"></i>Bookings <i
+                  class="legend-revenue"></i>Revenue</span>
+            </div>
+            <div class="chart-wrap"><canvas id="performanceChart"
+                aria-label="Bookings and revenue trend chart"></canvas></div>
+            <div class="chart-footnote" id="chartFootnote">Based on booking records available in Supabase.</div>
+          </article>
+          <article class="analytics-panel status-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">APPOINTMENTS</span>
+                <h3>Booking status</h3>
+              </div>
+            </div>
+            <div class="status-chart-layout">
+              <div class="donut-wrap"><canvas id="statusChart" aria-label="Booking status chart"></canvas>
+                <div class="donut-center"><strong id="statusTotal">0</strong><span>Total</span></div>
+              </div>
+              <div class="status-legend" id="statusLegend"></div>
+            </div>
+          </article>
+          <article class="analytics-panel service-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">WHAT CLIENTS LOVE</span>
+                <h3>Popular services</h3>
+              </div>
+            </div>
+            <div id="popularServices" class="popular-services">
+              <p class="muted">Service insights appear when bookings are available.</p>
+            </div>
+          </article>
+          <article class="analytics-panel visitors-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">WEBSITE REACH</span>
+                <h3>Visitor activity</h3>
+              </div><span class="live-dot-label"><i></i> Tracking</span>
+            </div>
+            <div class="visitor-number" id="visitorTotal">—</div>
+            <p class="muted" id="visitorDescription">Set up the analytics SQL to start counting website visits.</p>
+            <div class="visitor-mini-chart">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </article>
+        </div>
+       
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
