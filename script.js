@@ -598,10 +598,12 @@ function init() {
     $("#menuToggle").setAttribute("aria-expanded", "false");
   }));
 
-  $("#themeToggle").addEventListener("click", () => {
+  const toggleTheme = () => {
     const dark = document.body.classList.toggle("dark-theme");
     try { localStorage.setItem("sb-salon-theme", dark ? "dark" : "light"); } catch (_) {}
-  });
+  };
+  $("#themeToggle").addEventListener("click", toggleTheme);
+  $("#adminThemeToggle").addEventListener("click", toggleTheme);
   try {
     if (localStorage.getItem("sb-salon-theme") === "dark") document.body.classList.add("dark-theme");
   } catch (_) {}
